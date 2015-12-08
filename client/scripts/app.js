@@ -7,6 +7,8 @@ function escapeHtml(str) {
 };
 
 var app = {
+    roomCache: {},
+    friendCache: {},
     //
     server: 'https://api.parse.com/1/classes/chatterbox',
 
@@ -30,6 +32,7 @@ var app = {
     },
 
     fetch: function() {
+      var counter = 0;
       $.ajax({
         // This is the url you should use to communicate with the parse API server.
         url: this.server,
@@ -38,7 +41,11 @@ var app = {
         contentType: 'application/json',
         success: function (data) {
           var $chat = $('#chats');
+          console.log(data);
+          $chat.children().remove();
+
           for (var i = 0; i < data.results.length; i++){
+
             var sanitizedRoom = escapeHtml(data.results[i].roomname);
             //var dataRoom = sanitizedRoom.split(' ').join('_')
             var dataRoom = sanitizedRoom.replace(/\s/g, '_');
@@ -46,7 +53,11 @@ var app = {
             var text = "<div class = 'text'><p>" + escapeHtml(data.results[i].text) + "</p></div>";
             var time = "<div class = 'time'><p>" + escapeHtml(data.results[i].createdAt) + "</p></div>";
             var room = "<div class = 'time'><p>" + sanitizedRoom + "</p></div>";
-            $chat.append('<div class = "message" data-roomname='+dataRoom+'>' + user + time + text + room +'</div>')
+            $chat.append('<div class = "message '+dataRoom+'">' + user + time + text + room +'</div>')
+            if(!app.roomCache[sanitizedRoom]){
+              app.roomCache[sanitizedRoom] = true;
+              $('.menu ul').append('<li class = "childLi">' + dataRoom + '</li>');
+            }
           }
           // var test = '<div>' + data.results[0] + '<div>';
           //append to the dom
@@ -69,11 +80,11 @@ var app = {
         var user = "<div class = 'username'><p>" + message.username + "</p></div>";
         var text = "<div class = 'text'><p>" + message.text + "</p></div>";
         var room = "<div class = 'time'><p>" + message.roomname + "</p></div>";
-        $chat.append('<div class = "message">' + user + room + text + '</div>')
+        $chat.prepend('<div class = "message">' + user + room + text + '</div>')
       },
 
     addRoom: function(roomname) {
-      $('#roomSelect').append('<div class = "room">' + roomname + '</div>');
+      $('.menu ul').append('<li class = "childLi">' + roomname + '</li>');
     }, 
 
     addFriend : function(name){
@@ -96,7 +107,7 @@ var app = {
 $('document').ready(function(){
   $('body').on('click', '.username', function(){ app.addFriend($(this).data('username')) })
 
-  $('.submit').on('click', function() {
+  $('#send .submit').on('click', function() {
     var message = {};
     message.time = new Date();
     message.username = 'Frank';
@@ -104,6 +115,32 @@ $('document').ready(function(){
     console.log(message)
     app.send(message);
   });
-});
 
-app.fetch();
+  $('.refresh').on('click', function(){ app.fetch()})
+  
+  $('body').on('mouseEnter',$('.menu li'),function(){
+    $('.childLi').show();
+  });
+  // function() {
+  //   $('body').on('mouseexit', $('.childLi').hide();
+  // });
+
+  $('body').on('click', '.menu li', function(){
+    //console.log($(this).text())
+    if($(this).text().replace(/ /g, '') === 'Home') { // home is broken TODO
+      $('#chats').children().show();
+    } else {
+      showSelectedRoom($(this).text());
+    }
+  });
+});
+//setInterval(function(){ app.fetch() }, 1000);
+//app.fetch();
+var showSelectedRoom = function(room){
+  $('#chats').children().hide();
+  var dataRoom = room.replace(/\s/g, '_');
+  $('.'+dataRoom).show();
+}
+
+
+

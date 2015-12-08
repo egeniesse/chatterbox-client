@@ -108,3 +108,31 @@ form input[type=text] {
 .date p {
     font-size: 10pt;
 }
+
+.menu {
+    float: left;
+    width: 150px;
+    
+
+}
+
+.menu ul {
+    text-decoration: none;
+    list-style: none;
+}
+
+.menu li {
+    background-color: maroon;
+    height: 50px;
+    width: 150px;
+    line-height: 50px;
+    text-align: center;
+    display: block;
+}
+
+.childLi {
+    display: none;
+}
+.menu li:hover {
+    background-color: red;
+}
