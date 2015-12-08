@@ -91,7 +91,7 @@ form input[type=text] {
     background-color: white;
     /*text-align: center;*/
 }
-.user {
+.username {
     width: 280px;
     color: blue;
     font-size: 20px;
