@@ -122,17 +122,20 @@ form input[type=text] {
 }
 
 .menu li {
-    background-color: maroon;
-    height: 50px;
-    width: 150px;
-    line-height: 50px;
+    background-color: #BBBBDD;
+    border-bottom: 2px solid #eee;
+    height: 30px;
+    width: 120px;
+    font-size: 11pt;
+    line-height: 30px;
     text-align: center;
     display: block;
+    border-radius: 3px;
 }
 
 .childLi {
     display: none;
 }
 .menu li:hover {
-    background-color: red;
+    background-color: #AAAACC;
 }

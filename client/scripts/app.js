@@ -121,9 +121,9 @@ $('document').ready(function(){
   $('body').on('mouseEnter',$('.menu li'),function(){
     $('.childLi').show();
   });
-  // function() {
-  //   $('body').on('mouseexit', $('.childLi').hide();
-  // });
+
+   $('body').on('mouseexit', $('.childLi'), function(){hide()});
+  
 
   $('body').on('click', '.menu li', function(){
     //console.log($(this).text())
